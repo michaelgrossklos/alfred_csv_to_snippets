@@ -26,9 +26,8 @@
 
 from csv import DictReader
 from json import dumps
-from os import urandom, path, mkdir, walk   
-from binascii import b2a_hex
-from sys import exit, argv
+from os import urandom, path, mkdir, walk
+from sys import exit
 
 import subprocess
 import uuid
@@ -68,7 +67,7 @@ targetPath = input()
 if not path.isdir(targetPath):
         errorMsg("The path you provided does not exist or isn't a directory:\n" + targetPath) 
 
-print("In order to convert the csv files into *.alfredsnippets files,\n this script generates one subfolder per file into which the single snippet files get saved.\n Do you want to keep those folders, otherwise they get deleted? (y/N)")
+print("In order to convert the csv files into *.alfredsnippets files, this script generates one subfolder per file into which the single snippet files get saved. Do you want to keep those folders, otherwise they get deleted? (y/N)")
 keepFolders = input()
 
 createdFolders = []
@@ -85,7 +84,7 @@ for root, dirs, files in walk(inputPath):
                 mkdir(outputPath)
                 print(f'Making folder {outputPath}...')
             except OSError:
-                print ("Creation of the directory %s failed" % path)
+                print (f"Creation of the directory {path} failed")
 
 
             with open (path.join(inputPath, outputFile), 'rt') as csvfile:
