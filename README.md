@@ -1,0 +1,1 @@
+# alfred_csv_to_snippets
