@@ -1,4 +1,4 @@
-# importSnippets.py
+# alfred_csv_to_snippets.py
 # Generates Alfred 4 json snippet files from a csv file
 # Written for python 3.8.5
 # 
@@ -7,7 +7,6 @@
 # Author: Michael Großklos (https://github.com/michaelgrossklos)
 #
 # Published under MIT license
-# MIT License
 #
 # Permission is hereby granted, free of charge, to any person obtaining a 
 # copy of this software and associated documentation files (the "Software"), 
