@@ -34,6 +34,7 @@ import uuid
 import logging
 import shutil
 import time
+import re
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -44,6 +45,11 @@ def dd(msg):
 def errorMsg(message):
     print('ERROR: ' + message)
     exit()  
+
+def replaceEmbededSnippets(content, sc_left, sc_right, rc_left, rc_right):
+    content = re.sub(rf'{sc_left}(\w+\:\w+){sc_right}', rf'{rc_left}\1{rc_right}', content)
+    content = re.sub(rf'{sc_left}\|', '{cursor}', content)
+    return content
     
 
 print("Specify the path where the CSV files are located:")
@@ -92,7 +98,8 @@ for root, dirs, files in walk(inputPath):
                 
                 for row in reader:    
                     uid = str(uuid.uuid1()).upper()
-
+                    row['content'] = replaceEmbededSnippets(row['content'], '%', '%', '{', '}')
+                    logging.debug(row['content'])
                     output = dumps({"alfredsnippet" : {"snippet" : row['content'], "uid": uid, "name" : row['name'], "keyword" : row['keyword']}}, sort_keys=False, indent=4, separators=(',', ': '))
                     outputFile = row['name']+" ["+uid+"].json"
                     target = outputPath + "/" + outputFile              
