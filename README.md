@@ -1,6 +1,6 @@
 # A Small Converter Script for Alfred Snippets
 
-This script converts export files (*.csv) from other snippet tools like TextExpander into *.alfredsnippets archives, which than easaly can be importet into Alfred 4.
+This script converts export files (*.csv) from other snippet tools like TextExpander into *.alfredsnippets archives, which than easaly can be importet into Alfred 4. It is inspired by the script by derickfay https://github.com/derickfay/import-alfred-snippets. In fact small snippets of his code is still in this one. 
 
 ## Dependencies
 There is one dependency which the script needs to convert the files. It is `Ditto` [https://ss64.com/osx/ditto.html](https://ss64.com/osx/ditto.html). Most likely, it's already installed on your machine. You can find out by simply typing `which ditto` in the terminal. If you get something like this `/usr/bin/ditto`, you are good to go.
