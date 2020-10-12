@@ -3,3 +3,4 @@ ot
 .DS_store
 .gitignore
 venv
+.idea
