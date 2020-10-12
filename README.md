@@ -18,16 +18,7 @@ Using this script is as simple as typing the following in the terminal:
 ### Folder Structure 
 It doesn't matter where to put this script or the exported `*.csv` files from the other snippet tool. But I recomment creating a dedicated folder on your Desktop. In this folder you should put this very script and creating a subfolder where you can place the `*.csv` files. And also create a subfolder where the converted files can be saved. The names of the folders doesn't matter. The folder structure could look like this.
 
-```
-+--Desktop
-   +-- my_snippet_files
-       +-- input_files
-           +- foobar_1.csv
-           +- foobar_2.csv
-           +- ...
-       +-- output_files
-       +- AlfredCsvToSnippets.py
-```
+![Bildschirmfoto 2020-10-12 um 17 53 59](https://user-images.githubusercontent.com/6610580/95774830-7b319300-0cc1-11eb-9a1a-15f231aa9abc.png)
 
 ### Command line arguments 
 The script uses command line agruments which you can specify behind the script call. The argument `-h` or `--help` shows all the arguments one can set. Basically all arguments are opional. 
