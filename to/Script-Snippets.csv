@@ -1,4 +1,0 @@
-﻿"xennote","tell application ""Evernote""
-	activate
-	create note from file theFile notebook ""Inbox"" tags ""%filltext:name=tags%""
-end tell","Evenrote Note Anlegen"
