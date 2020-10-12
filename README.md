@@ -1,6 +1,6 @@
 # A Small Converter Script for Alfred Snippets
 
-This script converts export files (*.csv) from other snippet tools like TextExpander into *.alfredsnippets archives, which than easaly can be importet into Alfred 4. It is inspired by the script by derickfay https://github.com/derickfay/import-alfred-snippets. In fact small snippets of his code is still in this one. 
+This script converts export files (*.csv) from other snippet tools like TextExpander into *.alfredsnippets archives, which than easally can be imported into Alfred 4. With limitation the script replaces the placeholders for embedded snippets. It is inspired by the script by derickfay https://github.com/derickfay/import-alfred-snippets. In fact small snippets of his code is still in this one. 
 
 ## Dependencies
 There is one dependency which the script needs to convert the files. It is `Ditto` [https://ss64.com/osx/ditto.html](https://ss64.com/osx/ditto.html). Most likely, it's already installed on your machine. You can find out by simply typing `which ditto` in the terminal. If you get something like this `/usr/bin/ditto`, you are good to go.
@@ -9,26 +9,44 @@ If `ditto` isn't installed on your machine, you should be able to install it via
 
 `Ditto` is used to pack the snippets folders into the actual `*.alfredsnippets` archives.
 
-## Usage ##
+## Usage 
 Using this script is as simple as typing the following in the terminal:
-`python3 alfred_csv_to_snippets.py`  
+`python3 AlfredCsvToSnippets.py [args]`  
 
 **_*<span style="color: #ff0000">CAUTION: Using this script is on your own risk.</span> Not that it could be more dangerous than loosing all the `*.csv` files. I did not deep testing this script and it is more like an quick and dirty aproach even thou, I tried to put in some error handling. So you've be warned ;)*_**
 
-### Saving the files ###
-It doesn't matter where to put this script or the exported `*.csv` files. Because during the process, you can specify all needed paths. I recomment creating a dedicated folder on your Desktop. In this folder you should put this very script and creating a subfolder where you can place the exported `*.csv` files. And also make a subfolder where the converted files can be saved. The names of the folders doesn't matter. But as I said, you can put them where ever you please.
+### Folder Structure 
+It doesn't matter where to put this script or the exported `*.csv` files from the other snippet tool. But I recomment creating a dedicated folder on your Desktop. In this folder you should put this very script and creating a subfolder where you can place the `*.csv` files. And also create a subfolder where the converted files can be saved. The names of the folders doesn't matter. The folder structure could look like this.
 
-### The questions ###
-No, it is not a questioneer. But during the processing of the script you get asked some questions.
+```
++--Desktop
+   +-- my_snippet_files
+       +-- input_files
+           +- foobar_1.csv
+           +- foobar_2.csv
+           +- ...
+       +-- output_files
+       +- AlfredCsvToSnippets.py
+```
 
-#### #1. Specify the path where the CSV files are located: ####
-If you're following my advice, this path could be `./csvfolder`. 
+### Command line arguments 
+The script uses command line agruments which you can specify behind the script call. The argument `-h` or `--help` shows all the arguments one can set. Basically all arguments are opional. 
 
-**Notice:** *this path must be relativ to the script. If you (for example) have put the script in a folder on your Desktop named `AlfredSnippets` and in that folder you created a subfolder named `csvfolder`, the relative path to that subfolder would be as shown above. Also, the folder you specify here, must already exist. The Script does not create one.*
+#### `-i` or `--input` (str) [default: current working directory]
+`Example: AlfredCsvToSnippets.py -i "./input_folder"`<br>
+This is the path to the folder where all the csv files are in. If you're following my advice, this path could be look like above.
 
-#### #2. Is this the order in which the content in your csv files is sorted: 'keyword, content, name'? (Y/n): ####
+**Notice:** *This path **must** be relativ to the `AlfredCsvToSnippets.py`. 
 
-The `*.csv` files must contain exactly three fields: the snippet abriviation, the snippet name and the snippet content/text. They don't need a first line with header names. Such a file could look somethins along the lines like this:
+#### `-o` or `--output` (str) [default: current working directory]
+`Example: AlfredCsvToSnippets.py -o "./output_folder"`<br>
+The `*.alfredsnippets` files need to be stored. Here you can tell the `AlfredCsvToSnippets.py`, where this place should be. Like the `--input` path, this one should be relativ to the script too. According to my recomendation this path could be like the example above. 
+
+**Notice:** *The folder you specify here, must already exist. The Script does not create one.*
+
+#### `-f` or `--fieldorder` (str) [default: abbreviation, content, name]
+`Example: AlfredCsvToSnippets.py -f "abbreviation, name, content"`<br>
+The `*.csv` files must contain exactly three fields: the snippet abbreviation, the snippet name and the snippet content/text. The `*.csv` files don't need a first line with header names. Such a file could look somethings along the lines like:
 ```
 "xseldriv","from selenium import webdriver","Python import Selenium webdriver"
 "xsel","from selenium.webdriver.common.keys import Keys","Python Selenium Keys"
@@ -36,33 +54,33 @@ The `*.csv` files must contain exactly three fields: the snippet abriviation, th
 "xfebcss","driver.find_element_by_css_selector()","Python find CSS"
 ``` 
 
-In the case above, the order of the elements are: keyword, content, name. If you've exported snippets from TextExpander it is likely possible that this order is allready correct. In that case, you just can press Enter.
+In the case above, the order of the elements are: abbreviation, content, name. If you've exported snippets from TextExpander it is likely possible that this order is allready correct. In that case, you don't need to use this argument.
 
-In case the fields do not match, just type `n` and press Enter.
+### Embedded snippets
+There may be already some embedded snippets in your snippets. In case of TextExpander they look like this `%snippet:foobar%`. Well, gues what?! In Alfred they look like this `{snippet:foobar}`. Not a huge difference but still a difference. If you would import your snippets with the `%snippet:foobar%` placeholders and you use this snippet, the placeholder would not be replaced with the embedded snippet. Instead you'd see just the text `%snippet:foobar%`.
 
-#### #3. Specify the order in which the content is sorted (f.e.: 'name, content, keyword'): ####
-In case you answered the question before with `n`, here is the place to specify the order that matches your `*.csv` files fields. Just type the order of the fields seperated by commas, f.e.: `name, keyword, content`. **Notice:** it is important that you stick to the field names. **They have to be `name`, `content` and `keyword`.** You just need to put them in the correct order matching you file design.
+Well, with the `AlfredCsvToSnippets.py` script those placeholderd get replaced. At least some of them. Because some snippet tool have some more snippet features than Alfred actually has. There are all kinds of placeholders. Since Alfred does not have the functionality that your actual snippet tool provides, we aren't be able to change these placeholders. The script is only be able to change two kind of placeholders which are `%snippet:foobar%` and `%|`. The last one is used (at least in TextExpander) as the placeholder for the cursor. In Alfred this is represented by `{cursor}`.
 
-#### #4. Where to save the converted files? ####
-The `*.alfredsnippets` files are need a place to be stored. Here you can tell the script, where this place should be. Like the prior mentioned path, this one should be relativ to the script too. I come back to my recomendation: this path could be something like this: `./export`. 
+Because I don't know all the different placeholders in all the tools, I decided to make the symbols changeable. With symbol I mean this `%`. Since most of the tools uses a left and a right symbol, you can set two different symbols. Below you can read how to use this feature.
 
-**Notice:** *The folder you specify here, must already exist. The Script does not create one.*
+#### `-l`or `--lplaceholder` (str) [default: %]
+`Example: AlfredCsvToSnippets.py -l "{{"`<br>
+Just provide the symbol that is on the left hand side of the placeholder code. As you can see it don't need to be just one character.
 
-#### #5. Deleting subfolders? ####
-In order to convert the `*.csv` files into `*.alfredsnippets` files, this script generates one subfolder per `*.csv` file, into which the single snippet files will be saved. Usually one `*.csv` file consists of multible snippets. Therfor the file represends the snippets group. During the conversion, these files are getting turned into subfolders in which single files will be placed. These files are the single snippet files. Their names are looking someting like this: `EN Screencast Site [2F6C090A-0BEA-11EB-80EF-002332307138].json`. Don't worry about the gibberish between the brackets. It's just a unique identifyer that Alfred requires.
+#### `-r`or `--rplaceholder` (str) [default: %]
+`Example: AlfredCsvToSnippets.py -r "}}"`<br>
+Just provide the symbol that is on the right hand side of the placeholder code. As you can see it don't need to be just one character.
 
-These automatically created subfolders, with the `*.json` files in them, can be deleted by the script, after the `*.alfredsnippets` files have been created. But if you wish, you just can type `y` on this question and the folders wont get deleted. Eather way... in the end you will have the `*.alfredsnippets`files. These are alongside the subfolders in the export folder that you specified earlier.  
+#### `-c`or `--changeplaceholders` (bool) [default: true]
+`Example: AlfredCsvToSnippets.py -c false`<br>
+If you do not want to have the placeholders changed at all, set this to false. If you are using this agument, the placeholders will be remain untouched. In that case obviously, you don't need to set the `--lplaceholder` nor the `--rplaceholder`.
 
-### Importing the files into Alfred App ###
+#### `-d`or `--deletefolders` (bool) [default: false]
+`Example: AlfredCsvToSnippets.py -d false`<br>
+In order to convert the `*.csv` files into `*.alfredsnippets` files, this script generates one subfolder per `*.csv` file, into which the single snippet files will be saved. Usually one `*.csv` file consists of multible snippets. Therfore the file represends the snippets group. During the conversion, these files are getting turned into subfolders in which the single files will be placed. For each row (record) of that `*.csv`, one `*.json` file will be created. These files are the single snippet files. Their names are looking someting like this: `EN Screencast Site [2F6C090A-0BEA-11EB-80EF-002332307138].json`. Don't worry about the gibberish between the brackets. It's just a unique identifyer that Alfred requires.
+
+These automatically created subfolders, can be automatically deleted. But if you wish to keep them you use the argument below. In the end you will have the `*.alfredsnippets` files and smome folders named after the `*.csv` files. 
+
+
+### Importing the files into Alfred 4
 To import the `*.alfredsnippets` files into Alfred 4, just double click them. Alfred Preferences will then open and you can verfy that you are willing to import these snippets. Each file gets stored as a seperate group in Alfred 4.
-
-## Remarks ##
-### Embedded snippets support ###
-Since Alfred 4.1 supports embedded snippets, which adds even more power to the tool, there is a little scatch to this script. If you are using other snippet tools that are allready supporting embeded snippets, the possibility is very high that the placeholders do not match. For example the embeded snippet placeholders of TextExpander are looking like this `%snippet:xmailsid%` or in case of the placeholder where the cursor should be placed `%|`. 
-
-This scipt does not change the contents inside the snippets. So maybe you have to do a little work to change these placeholders. Mainly it is just a matter of changing the `%%` with `{}`.
-
-Maybe in the future I add the functionality to change these placeholders automatically. But for now it is what it is. If one is in mood to add that functionality, please feel free to do so.
-
-### My apologies ###
-Since english is not my first langage (I am German), I plea to apologise all the typos and missspellings and gramar failures. Not just here but also in the script. If you want to fix them, feel free to do so.
