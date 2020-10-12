@@ -1,3 +1,4 @@
-./to
-./ot
+to
+ot
 .DS_store
+.gitignore
